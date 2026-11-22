@@ -47,3 +47,27 @@ body {
 .content { min-width: 0; } /* allows the hourly row to scroll sideways */
 .sidebar { display: flex; flex-direction: column; gap: 6px; }
 
+/* ---------- Search ---------- */
+.search-box { position: relative; display: flex; border-radius: 20px; padding: 4px 6px; margin-bottom: 14px; }
+.search-box input { flex: 1; border: 0; background: transparent; padding: 10px; font-size: 14px; outline: none; color: inherit; }
+.search-box button { border: 0; background: transparent; cursor: pointer; font-size: 16px; }
+.search-results {
+  position: absolute; top: 110%; left: 0; right: 0; z-index: 1000;
+  list-style: none; border-radius: 16px; overflow: hidden;
+  background: rgba(255,255,255,.9); backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+.search-results li { padding: 10px 14px; font-size: 14px; cursor: pointer; }
+.search-results li:hover { background: rgba(90,169,255,.2); }
+
+/* ---------- Current weather ---------- */
+.city-name { font-size: 26px; font-weight: 600; text-align: center; margin-bottom: 4px; }
+.city-name::before { content: "📍 "; font-size: 20px; }
+.big-icon { font-size: 110px; text-align: center; filter: drop-shadow(0 10px 25px rgba(255,180,60,.6)); }
+.big-temp { font-size: 84px; font-weight: 200; line-height: 1; }
+.unit-label { font-size: 34px; vertical-align: top; }
+.day-time { font-size: 20px; margin: 10px 0; }
+.day-time span:last-child { color: #8a94a8; }
+hr { border: 0; border-top: 1px solid rgba(20,33,61,.12); margin: 8px 0; }
+.condition-line { font-size: 14px; margin: 4px 0; }
+

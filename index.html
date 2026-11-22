@@ -16,6 +16,31 @@
 
   <main class="app glass">
 
+    <!-- LEFT SIDEBAR: search, current weather, map -->
+    <aside class="sidebar">
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Search a Sri Lankan city...">
+        <button id="searchButton" aria-label="Search">🔍</button>
+        <ul id="searchResults" class="search-results" hidden></ul>
+      </div>
+
+      <h1 id="cityName" class="city-name">Colombo</h1>
+
+      <div id="bigIcon" class="big-icon">☀️</div>
+      <div class="big-temp"><span id="currentTemp">--</span><span class="unit-label">°C</span></div>
+      <p class="day-time"><span id="dayName">--</span> <span id="timeText">--:--</span></p>
+      <hr>
+      <p class="condition-line"><span id="conditionIcon">☁️</span> <span id="conditionText">Loading...</span></p>
+      <p class="condition-line">💧 Rain - <span id="rainChance">--</span>%</p>
+
+      <div class="map-card">
+        <div id="map"></div>
+        <div class="map-info">
+          <strong id="placeName">Colombo</strong>
+          <span id="placeCoords">--</span>
+        </div>
+      </div>
+    </aside>
 
 
   </main>
