@@ -42,6 +42,73 @@
       </div>
     </aside>
 
+    <!-- RIGHT SIDE: tabs, forecast, highlights -->
+    <section class="content">
+      <header class="top-bar">
+        <div class="tabs">
+          <button id="tabToday" class="tab">Today</button>
+          <button id="tabWeek" class="tab active">Week</button>
+        </div>
+        <div class="unit-buttons">
+          <button id="unitC" class="unit active">°C</button>
+          <button id="unitF" class="unit">°F</button>
+        </div>
+      </header>
+
+      <div id="errorBox" class="error-box" hidden>
+        <span id="errorText"></span>
+        <button id="retryButton">Retry</button>
+      </div>
+
+      <!-- Week view: 7 small day cards -->
+      <div id="weekView" class="week-row"></div>
+
+      <!-- Today view: next 24 hours + rainfall chart -->
+      <div id="todayView" hidden>
+        <div id="hourlyRow" class="hourly-row"></div>
+        <div class="card rain-card">
+          <h4>Rainfall · next 24 hours <span id="rainTotal"></span></h4>
+          <div id="rainChart" class="rain-chart"></div>
+          <div class="rain-labels"><span>Now</span><span>6h</span><span>12h</span><span>18h</span><span>24h</span></div>
+        </div>
+      </div>
+
+      <h2>Today's Highlights</h2>
+      <div class="highlights">
+        <div class="card">
+          <h4>UV Index</h4>
+          <div class="value" id="uvValue">--</div>
+          <div class="scale uv-scale"><i id="uvMarker"></i></div>
+          <p class="note" id="uvNote">--</p>
+        </div>
+        <div class="card">
+          <h4>Wind Status</h4>
+          <div class="value"><span id="windValue">--</span><small>km/h</small></div>
+          <p class="note">🧭 <span id="windDir">--</span></p>
+        </div>
+        <div class="card">
+          <h4>Sunrise &amp; Sunset</h4>
+          <p class="sun-row"><span class="sun-dot">↑</span> <span id="sunriseTime">--</span></p>
+          <p class="sun-row"><span class="sun-dot">↓</span> <span id="sunsetTime">--</span></p>
+        </div>
+        <div class="card">
+          <h4>Humidity</h4>
+          <div class="value"><span id="humidityValue">--</span><small>%</small></div>
+          <p class="note" id="humidityNote">--</p>
+        </div>
+        <div class="card">
+          <h4>Visibility</h4>
+          <div class="value"><span id="visibilityValue">--</span><small>km</small></div>
+          <p class="note">Feels like <span id="feelsLike">--</span>° · <span id="pressure">--</span> hPa</p>
+        </div>
+        <div class="card">
+          <h4>Air Quality</h4>
+          <div class="value" id="aqiValue">--</div>
+          <div class="scale aqi-scale"><i id="aqiMarker"></i></div>
+          <p class="note"><span id="aqiLabel">--</span> · PM2.5 <span id="pm25">--</span> · PM10 <span id="pm10">--</span> · O₃ <span id="ozone">--</span></p>
+        </div>
+      </div>
+    </section>
 
   </main>
 
