@@ -158,6 +158,53 @@ function renderWeather() {
   setText("sunriseTime", daily.sunrise[0].slice(11, 16));
   setText("sunsetTime", daily.sunset[0].slice(11, 16));
 
+  renderWeek(daily);
+  renderHourly(hourly, hourIndex);
+  renderRainChart(hourly, hourIndex);
+}
+
+function renderWeek(daily) {
+  let html = "";
+  for (let i = 0; i < daily.time.length; i++) {
+    const day = new Date(daily.time[i] + "T12:00").toLocaleDateString("en-US", { weekday: "short" });
+    const icon = describeWeather(daily.weather_code[i]).icon;
+    html += `
+      <div class="week-card">
+        <div>${day}</div>
+        <div class="icon">${icon}</div>
+        <div>${formatTemp(daily.temperature_2m_max[i])}° <span class="low">${formatTemp(daily.temperature_2m_min[i])}°</span></div>
+        <div class="rain">💧 ${daily.precipitation_probability_max[i] ?? "--"}%</div>
+      </div>`;
+  }
+  $("weekView").innerHTML = html;
+}
+
+function renderHourly(hourly, startIndex) {
+  let html = "";
+  for (let i = startIndex; i < startIndex + 24 && i < hourly.time.length; i++) {
+    const icon = describeWeather(hourly.weather_code[i]).icon;
+    html += `
+      <div class="hour-card">
+        <div>${hourly.time[i].slice(11, 16)}</div>
+        <div class="icon">${icon}</div>
+        <div>${formatTemp(hourly.temperature_2m[i])}°</div>
+        <div class="rain">💧 ${hourly.precipitation_probability[i] ?? "--"}%</div>
+      </div>`;
+  }
+  $("hourlyRow").innerHTML = html;
+}
+
+// Simple bar chart: one bar per hour, height = millimetres of rain
+function renderRainChart(hourly, startIndex) {
+  const amounts = hourly.precipitation.slice(startIndex, startIndex + 24);
+  const biggest = Math.max(1, ...amounts); // at least 1 so flat days look flat
+  const total = amounts.reduce((sum, mm) => sum + (mm || 0), 0);
+  let html = "";
+  for (const mm of amounts) {
+    html += `<div class="rain-bar" title="${mm} mm" style="height:${((mm || 0) / biggest) * 100}%"></div>`;
+  }
+  $("rainChart").innerHTML = html;
+  $("rainTotal").textContent = "· " + total.toFixed(1) + " mm";
 }
 
 // ---------- 5. Map ----------
@@ -167,6 +214,15 @@ function renderWeather() {
 // ---------- 7. Buttons and tabs ----------
 
 
+// Switch between Today and Week views
+function showTab(tab) {
+  $("tabToday").classList.toggle("active", tab === "today");
+  $("tabWeek").classList.toggle("active", tab === "week");
+  $("todayView").hidden = tab !== "today";
+  $("weekView").hidden = tab !== "week";
+}
+$("tabToday").addEventListener("click", () => showTab("today"));
+$("tabWeek").addEventListener("click", () => showTab("week"));
 
 
 // ---------- 8. Start the app ----------
