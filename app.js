@@ -98,6 +98,8 @@ async function loadPlace(lat, lon, name) {
   setText("placeName", name);
   setText("placeCoords", lat.toFixed(3) + ", " + lon.toFixed(3));
 
+  // Air quality loads on its own, so if it fails the weather still shows
+  loadAirQuality(lat, lon);
 
   try {
     const url = "https://api.open-meteo.com/v1/forecast"
@@ -118,6 +120,20 @@ async function loadPlace(lat, lon, name) {
   } finally {
     // Runs on success AND failure, so loading never gets stuck
     $("loading").hidden = true;
+  }
+}
+
+async function loadAirQuality(lat, lon) {
+  try {
+    const url = "https://air-quality-api.open-meteo.com/v1/air-quality"
+      + "?latitude=" + lat + "&longitude=" + lon
+      + "&current=us_aqi,pm10,pm2_5,ozone&timezone=auto";
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Air quality error");
+    const data = await response.json();
+    renderAirQuality(data.current);
+  } catch (error) {
+    renderAirQuality(null);
   }
 }
 
@@ -158,9 +174,45 @@ function renderWeather() {
   setText("sunriseTime", daily.sunrise[0].slice(11, 16));
   setText("sunsetTime", daily.sunset[0].slice(11, 16));
 
+  renderUv(hourly.uv_index[hourIndex]);
   renderWeek(daily);
   renderHourly(hourly, hourIndex);
   renderRainChart(hourly, hourIndex);
+}
+
+function renderUv(uv) {
+  const value = uv == null ? 0 : uv;
+  let advice = "Low - no protection needed.";
+  if (value >= 3)  advice = "Moderate - wear sunglasses.";
+  if (value >= 6)  advice = "High - use sunscreen and a hat.";
+  if (value >= 8)  advice = "Very high - avoid midday sun.";
+  if (value >= 11) advice = "Extreme - stay indoors if you can.";
+  setText("uvValue", uv == null ? null : uv.toFixed(1));
+  setText("uvNote", advice);
+  $("uvMarker").style.left = Math.min(value / 12, 1) * 100 + "%";
+}
+
+function renderAirQuality(current) {
+  if (!current || current.us_aqi == null) {
+    setText("aqiValue", "N/A");
+    setText("aqiLabel", "Not available");
+    setText("pm25", null); setText("pm10", null); setText("ozone", null);
+    $("aqiMarker").style.left = "0%";
+    return;
+  }
+  const aqi = current.us_aqi;
+  let label = "Good";
+  if (aqi > 50)  label = "Moderate";
+  if (aqi > 100) label = "Unhealthy for Sensitive Groups";
+  if (aqi > 150) label = "Unhealthy";
+  if (aqi > 200) label = "Very Unhealthy";
+  if (aqi > 300) label = "Hazardous";
+  setText("aqiValue", aqi);
+  setText("aqiLabel", label);
+  setText("pm25", current.pm2_5);
+  setText("pm10", current.pm10);
+  setText("ozone", current.ozone);
+  $("aqiMarker").style.left = Math.min(aqi / 500, 1) * 100 + "%";
 }
 
 function renderWeek(daily) {
