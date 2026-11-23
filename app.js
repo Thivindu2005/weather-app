@@ -303,8 +303,46 @@ function moveMarker(lat, lon) {
 
 // ---------- 6. Search ----------
 
+async function searchCity() {
+  const text = $("searchInput").value.trim();
+  if (text === "") return;
+  try {
+    const url = "https://geocoding-api.open-meteo.com/v1/search?name=" + encodeURIComponent(text) + "&count=10&language=en";
+    const response = await fetch(url);
+    const data = await response.json();
+    let results = data.results || [];
+    // Put Sri Lankan results first
+    results.sort((a, b) => (b.country_code === "LK") - (a.country_code === "LK"));
+    showSearchResults(results.slice(0, 5));
+  } catch (error) {
+    showSearchResults([]);
+  }
+}
+
+function showSearchResults(results) {
+  const list = $("searchResults");
+  list.innerHTML = "";
+  if (results.length === 0) {
+    list.innerHTML = "<li>No places found</li>";
+  }
+  for (const place of results) {
+    const item = document.createElement("li");
+    item.textContent = place.name + (place.admin1 ? ", " + place.admin1 : "") + ", " + place.country;
+    item.addEventListener("click", () => {
+      list.hidden = true;
+      $("searchInput").value = "";
+      if (map) map.setView([place.latitude, place.longitude], 9);
+      loadPlace(place.latitude, place.longitude, place.name);
+    });
+    list.appendChild(item);
+  }
+  list.hidden = false;
+}
+
 // ---------- 7. Buttons and tabs ----------
 
+$("searchButton").addEventListener("click", searchCity);
+$("searchInput").addEventListener("keydown", (event) => { if (event.key === "Enter") searchCity(); });
 
 // Switch between Today and Week views
 function showTab(tab) {
