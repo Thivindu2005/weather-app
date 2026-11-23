@@ -343,6 +343,7 @@ function showSearchResults(results) {
 
 $("searchButton").addEventListener("click", searchCity);
 $("searchInput").addEventListener("keydown", (event) => { if (event.key === "Enter") searchCity(); });
+$("retryButton").addEventListener("click", () => loadPlace(state.lat, state.lon, state.name));
 
 // Switch between Today and Week views
 function showTab(tab) {
@@ -354,6 +355,15 @@ function showTab(tab) {
 $("tabToday").addEventListener("click", () => showTab("today"));
 $("tabWeek").addEventListener("click", () => showTab("week"));
 
+// Switch between Celsius and Fahrenheit
+function setUnit(unit) {
+  state.unit = unit;
+  $("unitC").classList.toggle("active", unit === "C");
+  $("unitF").classList.toggle("active", unit === "F");
+  if (state.weather) renderWeather();
+}
+$("unitC").addEventListener("click", () => setUnit("C"));
+$("unitF").addEventListener("click", () => setUnit("F"));
 
 // ---------- 8. Start the app ----------
 setupMap();
