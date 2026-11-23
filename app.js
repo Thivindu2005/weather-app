@@ -97,6 +97,7 @@ async function loadPlace(lat, lon, name) {
   setText("cityName", name);
   setText("placeName", name);
   setText("placeCoords", lat.toFixed(3) + ", " + lon.toFixed(3));
+  moveMarker(lat, lon);
 
   // Air quality loads on its own, so if it fails the weather still shows
   loadAirQuality(lat, lon);
@@ -261,6 +262,45 @@ function renderRainChart(hourly, startIndex) {
 
 // ---------- 5. Map ----------
 
+function setupMap() {
+  // If Leaflet failed to load, skip the map but keep the dashboard working
+  if (typeof L === "undefined") { $("map").textContent = "Map unavailable"; return; }
+
+  map = L.map("map", { zoomControl: true }).setView([7.8731, 80.7718], 7);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors",
+    maxZoom: 18
+  }).addTo(map);
+
+  // One small clickable dot per city
+  for (const city of cities) {
+    L.circleMarker([city.lat, city.lon], { radius: 6, color: "#fff", weight: 2, fillColor: "#3b5bdb", fillOpacity: 1 })
+      .addTo(map)
+      .bindTooltip(city.name)
+      .on("click", () => loadPlace(city.lat, city.lon, city.name));
+  }
+
+  // Click anywhere on the map to pick that spot
+  map.on("click", (event) => {
+    const lat = event.latlng.lat;
+    const lon = event.latlng.lng;
+    loadPlace(lat, lon, "Near " + nearestCity(lat, lon));
+  });
+
+  // Fix the grey-tiles problem when the layout finishes sizing
+  setTimeout(() => map.invalidateSize(), 300);
+}
+
+function moveMarker(lat, lon) {
+  if (!map) return;
+  if (selectedMarker) {
+    selectedMarker.setLatLng([lat, lon]);
+  } else {
+    const icon = L.divIcon({ className: "", html: '<div class="pulse-marker"></div>', iconSize: [18, 18] });
+    selectedMarker = L.marker([lat, lon], { icon }).addTo(map);
+  }
+}
+
 // ---------- 6. Search ----------
 
 // ---------- 7. Buttons and tabs ----------
@@ -278,4 +318,5 @@ $("tabWeek").addEventListener("click", () => showTab("week"));
 
 
 // ---------- 8. Start the app ----------
+setupMap();
 loadPlace(state.lat, state.lon, state.name);
