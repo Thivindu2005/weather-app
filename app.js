@@ -5,20 +5,50 @@
 
 // ---------- 1. Data and settings ----------
 
-// Major Sri Lankan cities (approximate coordinates)
+// All 25 districts of Sri Lanka (coordinates of each district's main town)
 const cities = [
+  // Western Province
   { name: "Colombo",      lat: 6.9271, lon: 79.8612 },
+  { name: "Gampaha",      lat: 7.0917, lon: 79.9999 },
+  { name: "Kalutara",     lat: 6.5854, lon: 79.9607 },
+
+  // Central Province
   { name: "Kandy",        lat: 7.2906, lon: 80.6337 },
-  { name: "Galle",        lat: 6.0535, lon: 80.2210 },
-  { name: "Jaffna",       lat: 9.6615, lon: 80.0255 },
-  { name: "Trincomalee",  lat: 8.5874, lon: 81.2152 },
-  { name: "Batticaloa",   lat: 7.7310, lon: 81.6747 },
-  { name: "Anuradhapura", lat: 8.3114, lon: 80.4037 },
+  { name: "Matale",       lat: 7.4675, lon: 80.6234 },
   { name: "Nuwara Eliya", lat: 6.9497, lon: 80.7891 },
-  { name: "Ratnapura",    lat: 6.7056, lon: 80.3847 },
+
+  // Southern Province
+  { name: "Galle",        lat: 6.0535, lon: 80.2210 },
+  { name: "Matara",       lat: 5.9549, lon: 80.5550 },
+  { name: "Hambantota",   lat: 6.1241, lon: 81.1185 },
+
+  // Northern Province
+  { name: "Jaffna",       lat: 9.6615, lon: 80.0255 },
+  { name: "Kilinochchi",  lat: 9.3803, lon: 80.3770 },
+  { name: "Mannar",       lat: 8.9810, lon: 79.9044 },
+  { name: "Vavuniya",     lat: 8.7514, lon: 80.4971 },
+  { name: "Mullaitivu",   lat: 9.2671, lon: 80.8142 },
+
+  // Eastern Province
+  { name: "Batticaloa",   lat: 7.7310, lon: 81.6747 },
+  { name: "Ampara",       lat: 7.2912, lon: 81.6724 },
+  { name: "Trincomalee",  lat: 8.5874, lon: 81.2152 },
+
+  // North Western Province
   { name: "Kurunegala",   lat: 7.4863, lon: 80.3647 },
+  { name: "Puttalam",     lat: 8.0408, lon: 79.8394 },
+
+  // North Central Province
+  { name: "Anuradhapura", lat: 8.3114, lon: 80.4037 },
+  { name: "Polonnaruwa",  lat: 7.9403, lon: 81.0188 },
+
+  // Uva Province
   { name: "Badulla",      lat: 6.9934, lon: 81.0550 },
-  { name: "Hambantota",   lat: 6.1241, lon: 81.1185 }
+  { name: "Monaragala",   lat: 6.8728, lon: 81.3507 },
+
+  // Sabaragamuwa Province
+  { name: "Ratnapura",    lat: 6.7056, lon: 80.3847 },
+  { name: "Kegalle",      lat: 7.2513, lon: 80.3464 }
 ];
 
 // Everything the app currently remembers
